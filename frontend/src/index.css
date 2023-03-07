@@ -186,10 +186,13 @@ tbody > tr {
   
   thead > tr {
     grid-template-columns: 40% 30% 30%;
+    padding: 0.7rem;
+    font-size: 1.2rem;
   }
   
   tbody td {
-    padding: 0;
+    padding: 0.7rem;
+    font-size: 0.9rem;
   }
   
   tbody td:first-child {
