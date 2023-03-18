@@ -39,7 +39,7 @@ function SearchBoard() {
   
   const sortedSearchBooks = {
     query: searchResults.query,
-    list: [...searchResults.list].sort((a, b) => (a.author > b.author ? 1 : -1))
+    list: [...searchResults.list].sort((a, b) => a.author.localeCompare(b.author))
   };
 
   const handleChange = (e) => {
@@ -48,47 +48,33 @@ function SearchBoard() {
     setNoMessage(false);
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (search.trim().length === '') {
-      setNoMessage(true)
-      return;
-    }
 
-    const results = books.filter((book) => {
+  const searchBooks = () => {
+    const filteredBooks = books.filter((book) => {
       if (search === "") return books;
       return (
         book.title.toLowerCase().includes(search.toLowerCase()) ||
         book.author.toLowerCase().includes(search.toLowerCase()) ||
         book.genre.toLowerCase().includes(search.toLowerCase())
-      );
+      );     
     });
+    return filteredBooks;
+  }
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (search.trim().length === '') {
+      setNoMessage(true)
+      return;
+    }    
+    
+    const filteredBooks = searchBooks(search);
+    
     setSearchResults({
       query: search,
-      list: results,
+      list: filteredBooks,
     });
-    setNoResult(results.length === 0);
-    const sortedBooks = {
-      query: search,
-      list: books.filter((book) =>
-      book.title.toLowerCase().includes(search.toLowerCase()) ||
-      book.author.toLowerCase().includes(search.toLowerCase()) ||
-      book.genre.toLowerCase().includes(search.toLowerCase())
-      )
-    };
-    
-    setSearchResults(sortedBooks);
-
-    const sortedSearchBooks = {
-      query: search,
-      list: books.filter((book) =>
-      book.title.toLowerCase().includes(search.toLowerCase()) ||
-      book.author.toLowerCase().includes(search.toLowerCase()) ||
-      book.genre.toLowerCase().includes(search.toLowerCase())
-      )
-    };
-    
-    setSearchResults(sortedSearchBooks);
+    setNoResult(filteredBooks.length === 0)
   }
   
     const handleCancelSearch = () => {
